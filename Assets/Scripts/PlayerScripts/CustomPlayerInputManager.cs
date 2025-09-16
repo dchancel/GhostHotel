@@ -5,16 +5,16 @@ using System.Collections.Generic;
 public class CustomPlayerInputManager : PlayerInputManager
 {
     public List<PlayerData> data = new List<PlayerData> ();
-    public Camera backupCamera;
+    //public Camera backupCamera;
 
     private int activePlayers;
 
     private void Start()
     {
-        if(backupCamera == null)
+        /*if(backupCamera == null)
         {
             backupCamera = Camera.main;
-        }
+        }*/
     }
 
     public void PlayerJoined(PlayerInput playerInput)
@@ -26,7 +26,7 @@ public class CustomPlayerInputManager : PlayerInputManager
 
         activePlayers++;
 
-        HandleBackupCamera();
+        //HandleBackupCamera();
     }
 
     public void PlayerLeft(PlayerInput playerInput)
@@ -37,12 +37,12 @@ public class CustomPlayerInputManager : PlayerInputManager
 
         activePlayers--;
 
-        HandleBackupCamera() ;
+        //HandleBackupCamera() ;
     }
 
     private void HandleBackupCamera()
     {
-        if(backupCamera == null)
+        /*if(backupCamera == null)
         {
             return; //to avoid an annoying error when exiting play mode
         }
@@ -54,7 +54,7 @@ public class CustomPlayerInputManager : PlayerInputManager
         else
         {
             backupCamera.gameObject.SetActive(false);
-        }
+        }*/
     }
     
 }

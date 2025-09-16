@@ -183,7 +183,7 @@ MonoBehaviour:
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
-  m_Camera: {fileID: 9126695752347020649}
+  m_Camera: {fileID: 0}
 --- !u!135 &1709792584607776982
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -359,7 +359,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2143874138053651696
 Transform:
   m_ObjectHideFlags: 0

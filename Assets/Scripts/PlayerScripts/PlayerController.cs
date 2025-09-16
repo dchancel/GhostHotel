@@ -71,6 +71,7 @@ public class PlayerController : MonoBehaviour
         pawn = ghost;
         isActive = true;
         pd.playerObject.SetActive(true);
+        CameraController.Instance.AddTarget(this.transform);
     }
 
     public void Packout(PlayerData pd)
@@ -82,6 +83,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         pd.playerObject.SetActive(false);
+        CameraController.Instance.RemoveTarget(this.transform);
     }
 
     public void TryPossess()
