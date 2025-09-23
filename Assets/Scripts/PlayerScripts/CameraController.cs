@@ -7,6 +7,7 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private List<Transform> targets = new List<Transform> ();
 
+    [SerializeField] private float minimumDistance;
     [SerializeField] private float zoomCoefficient;
 
     private Vector3 singleTargetOffset = new Vector3(0f, 5f, -2f);
@@ -63,7 +64,8 @@ public class CameraController : MonoBehaviour
 
     private void Singleplayer()
     {
-        transform.position = targets[0].position + singleTargetOffset;
+        transform.position = targets[0].position;
+        transform.position += transform.forward * -minimumDistance;
     }
 
     private void Multiplayer()
@@ -71,7 +73,9 @@ public class CameraController : MonoBehaviour
         //The actually important part
         Vector3 midpoint = (targets[0].position + targets[1].position)/2f;
 
-        transform.position = midpoint + singleTargetOffset;
+        transform.position = midpoint;
+
+        transform.position += transform.forward * -minimumDistance;
 
         transform.position += transform.forward * -GetZoomLevel();
     }

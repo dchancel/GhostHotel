@@ -12,18 +12,18 @@ public class CustomPlayerInputManager : PlayerInputManager
 
     private int activePlayers;
 
-    private void Start()
+    private void Awake()
     {
         if(instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(this.gameObject);
         }
         else
         {
-            Destroy(this.gameObject);
+            DestroyImmediate(this.gameObject);
         }
 
-        DontDestroyOnLoad(this.gameObject);
     }
 
     public void PlayerJoined(PlayerInput playerInput)
@@ -31,8 +31,12 @@ public class CustomPlayerInputManager : PlayerInputManager
         Debug.Log("Player Joined");
         Debug.Log($"Player joined: {playerInput.playerIndex} with device: {playerInput.devices[0].name}");
 
-        playerInput.GetComponent<PlayerController>().Setup(data[playerInput.playerIndex]);
+        //playerInput.GetComponent<PlayerController>().Setup(data[playerInput.playerIndex]);
         players.Add(playerInput);
+        if(LevelManager.instance != null)
+        {
+            LevelManager.instance.AttachPlayer(playerInput);
+        }
 
         activePlayers++;
 
@@ -46,6 +50,10 @@ public class CustomPlayerInputManager : PlayerInputManager
         playerInput.GetComponent <PlayerController>().Packout(data[playerInput.playerIndex]);
 
         players.Remove(playerInput);
+        if (LevelManager.instance != null)
+        {
+            LevelManager.instance.DetachPlayer(playerInput);
+        }
 
         activePlayers--;
 

@@ -34,6 +34,12 @@ public class PawnController : MonoBehaviour
         controller = null;
     }
 
+    public bool IsNPC()
+    {
+        //If no controller is attached, this is an NPC, and is available for NPC control
+        return controller == null;
+    }
+
     public void DoMove(Vector2 moveInput)
     {
         Vector3 moveDir = new Vector3(moveInput.x, 0f, moveInput.y).normalized;

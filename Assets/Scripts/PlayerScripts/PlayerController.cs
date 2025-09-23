@@ -19,6 +19,11 @@ public class PlayerController : MonoBehaviour
 
     private const float GHOST_HEIGHT = 1.5f;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
     public void Possess(PawnController p)
     {
         if (p.Possess(this))
@@ -68,6 +73,10 @@ public class PlayerController : MonoBehaviour
 
     public void Setup(PlayerData pd)
     {
+        if(pd == null)
+        {
+            return;
+        }
         ghost = pd.ghost;
         ghost.Possess(this);
         pawn = ghost;
@@ -99,16 +108,29 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (UIInputHandler.instance != null)
+        {
+
+        }
+
         if (!isActive)
         {
             return;
         }
 
-        pawn.DoMove(cachedMove);
-        if(GroundPosition(pawn.transform.position) != transform.position)
+
+        if (pawn != null)
         {
-            transform.position = GroundPosition(pawn.transform.position);
+            pawn.DoMove(cachedMove);
+
+            if(GroundPosition(pawn.transform.position) != transform.position)
+            {
+                transform.position = GroundPosition(pawn.transform.position);
+            }
         }
+
+
+
     }
 
     private Vector3 GroundPosition(Vector3 v)
@@ -124,12 +146,26 @@ public class PlayerController : MonoBehaviour
 
     public void OnPrimary(InputValue c)
     {
-        pawn.DoPrimary();
+        if (pawn != null)
+        {
+            pawn.DoPrimary();
+        }
+        if (UIInputHandler.instance != null)
+        {
+
+        }
     }
 
     public void OnSecondary(InputValue c)
     {
-        pawn.DoSecondary();
+        if (pawn != null)
+        {
+            pawn.DoSecondary();
+        }
+        if (UIInputHandler.instance != null)
+        {
+
+        }
     }
 
     public void OnPause(InputValue c)

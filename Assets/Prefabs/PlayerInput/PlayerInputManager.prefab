@@ -100,8 +100,5 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
-  data:
-  - playerObject: {fileID: 0}
-    ghost: {fileID: 0}
-  - playerObject: {fileID: 0}
-    ghost: {fileID: 0}
+  data: []
+  players: []
