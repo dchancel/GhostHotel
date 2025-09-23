@@ -26,6 +26,8 @@ public class PlayerController : MonoBehaviour
             pawn = p;
             SetGhostActive(false);
         }
+
+        DontDestroyOnLoad(this.gameObject);
     }
 
     public void ReleasePawn()
