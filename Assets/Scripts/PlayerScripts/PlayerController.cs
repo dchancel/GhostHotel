@@ -24,6 +24,11 @@ public class PlayerController : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
+    public void OnDeviceLost()
+    {
+        Debug.Log($"Device Lost");
+    }
+
     public void Possess(PawnController p)
     {
         if (p.Possess(this))
