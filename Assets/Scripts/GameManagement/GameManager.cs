@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     private float serviceTime = 0f;
     private float serviceLength = 3f * 60f;
 
+    [SerializeField] private UnityEngine.UI.Slider timerSlider;
+
     private void Start()
     {
         StartSetup();
@@ -20,7 +22,7 @@ public class GameManager : MonoBehaviour
         isServing = false;
     }
 
-    private void StartService()
+    public void StartService()
     {
         isServing = true;
     }
@@ -45,6 +47,7 @@ public class GameManager : MonoBehaviour
         if(serviceTime < serviceLength)
         {
             serviceTime += Time.deltaTime;
+            timerSlider.value = serviceTime;
         }
         else
         {

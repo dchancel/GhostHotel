@@ -9,6 +9,8 @@ public class LevelManager : MonoBehaviour
 
     public PlayerData[] playerData = new PlayerData[2];
 
+    public int players = 0;
+
     private void Start()
     {
         if(instance == null)
@@ -47,6 +49,7 @@ public class LevelManager : MonoBehaviour
         {
             if (playerData[i].associatedPlayer == null)
             {
+                players++;
                 playerData[i].associatedPlayer = pi;
                 pi.GetComponent<PlayerController>().Setup(playerData[i]);
                 return;
@@ -60,6 +63,7 @@ public class LevelManager : MonoBehaviour
         {
             if(playerData[i].associatedPlayer == pi)
             {
+                players--;
                 playerData[i].associatedPlayer = null;
                 playerData[i].playerObject.SetActive(false);
             }

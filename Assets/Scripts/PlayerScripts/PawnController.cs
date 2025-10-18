@@ -6,6 +6,7 @@ public class PawnController : MonoBehaviour
 {
     [SerializeField] private MoveSet moveSet;
     [SerializeField] private float speed;
+    [SerializeField] private bool controlRotation;
 
     private PlayerController controller;
 
@@ -47,12 +48,44 @@ public class PawnController : MonoBehaviour
         if (moveSet == MoveSet.ghost)
         {
             //ghosts do not have colliders, and so do not need to worry about such things
-            transform.position += moveDir * MoveSpeed() * Time.deltaTime;
+            transform.position += moveDir * MoveSpeed() * RotationInfluence(moveInput) * Time.deltaTime;
         }
         else
         {
-            rb.MovePosition(transform.position + (moveDir * MoveSpeed() * Time.deltaTime));
+            rb.MovePosition(transform.position + (moveDir * MoveSpeed() * RotationInfluence(moveInput) * Time.deltaTime));
         }
+    }
+
+    private float RotationInfluence(Vector2 moveInput)
+    {
+        if (!controlRotation || moveInput == Vector2.zero)
+        {
+            return 1f;
+        }
+        Vector3 lookTarget = transform.position + new Vector3(moveInput.x, 0f, moveInput.y);
+
+        Vector3 lookPos = transform.position + transform.forward;
+
+
+        Debug.Log(Vector3.Distance(lookTarget, lookPos) + " vs " + Vector3.Distance(lookTarget, transform.position) * 2f);
+
+        if(Vector3.Distance(lookTarget,lookPos) >= Vector3.Distance(lookTarget,transform.position) * 1.95f)
+        {
+            lookTarget = transform.position + transform.right;
+        }
+
+        Vector3 lookTowards = Vector3.MoveTowards(lookPos, lookTarget, Time.deltaTime * speed * 3f);
+
+        transform.LookAt(lookTowards,Vector3.up);
+
+        return Mathf.Lerp(1f,0f, Vector3.Distance(lookTarget, lookPos));
+
+        if (Vector3.Distance(lookTarget, lookPos) < 0.1f)
+        {
+            return 1f;
+        }
+
+        return 0f;
     }
 
     private float MoveSpeed()
