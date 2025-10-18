@@ -184,6 +184,14 @@ public class PlayerController : MonoBehaviour
         {
             target = other.GetComponent<PawnController>();
         }
+        else if (other.transform.parent == null)
+        {
+
+        }
+        else if (other.transform.parent.GetComponent<PawnController>())
+        {
+            target = other.transform.parent.GetComponent<PawnController>();
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -191,6 +199,16 @@ public class PlayerController : MonoBehaviour
         if(other.GetComponent<PawnController>())
         {
             if(target == other.GetComponent<PawnController>())
+            {
+                target = null;
+            }
+        } else if(other.transform.parent == null)
+        {
+
+        }
+        else if (other.transform.parent.GetComponent<PawnController>())
+        {
+            if (target == other.transform.parent.GetComponent<PawnController>())
             {
                 target = null;
             }

@@ -28,7 +28,6 @@ public class CustomPlayerInputManager : PlayerInputManager
 
     public void PlayerJoined(PlayerInput playerInput)
     {
-        Debug.Log("Player Joined");
         Debug.Log($"Player joined: {playerInput.playerIndex} with device: {playerInput.devices[0].name}");
 
         //playerInput.GetComponent<PlayerController>().Setup(data[playerInput.playerIndex]);
