@@ -2,12 +2,13 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
 
-public enum MoveSet { ghost,standard}
+public enum MoveSet { ghost,standard,cart}
 
 public class PawnController : MonoBehaviour
 {
     [SerializeField] private MoveSet moveSet;
     [SerializeField] private float speed;
+    [SerializeField] private float rotationSpeed;
     [SerializeField] private bool controlRotation;
 
     public UnityEvent OnBeginPossession;
@@ -29,6 +30,11 @@ public class PawnController : MonoBehaviour
         if (GetComponent<TaskController>())
         {
             tc = GetComponent<TaskController>();
+        }
+
+        if(rotationSpeed == 0f)
+        {
+            rotationSpeed = speed;
         }
     }
 
@@ -106,10 +112,51 @@ public class PawnController : MonoBehaviour
             //ghosts do not have colliders, and so do not need to worry about such things
             transform.position += moveDir * MoveSpeed() * RotationInfluence(moveInput) * Time.deltaTime;
         }
+        else if(moveSet == MoveSet.cart)
+        {
+            if(moveDir == Vector3.zero)
+            {
+                return;
+            }
+
+            Vector3 proxyForward = transform.forward;
+
+            if(Vector3.Distance(transform.position + moveDir,transform.position + transform.forward) > Vector3.Distance(transform.position + moveDir, transform.position - transform.forward))
+            {
+                Debug.Log("moving backwards");
+                proxyForward = -transform.forward;
+            }
+            RotationInfluence(moveInput, proxyForward);
+            rb.MovePosition(transform.position + (proxyForward * MoveSpeed() * Time.deltaTime));
+        }
         else
         {
             rb.MovePosition(transform.position + (moveDir * MoveSpeed() * RotationInfluence(moveInput) * Time.deltaTime));
         }
+    }
+
+    private float RotationInfluence(Vector2 moveInput, Vector3 forward)
+    {
+        if(forward == -transform.forward)
+        {
+            Debug.Log("flipping move input");
+            moveInput = -moveInput;
+        }
+
+        Vector3 lookTarget = transform.position + new Vector3(moveInput.x, 0f, moveInput.y);
+
+        Vector3 lookPos = transform.position + transform.forward;
+
+        if (Vector3.Distance(lookTarget, lookPos) >= Vector3.Distance(lookTarget, transform.position) * 1.95f)
+        {
+            lookTarget = transform.position + transform.right;
+        }
+
+        Vector3 lookTowards = Vector3.MoveTowards(lookPos, lookTarget, Time.deltaTime * rotationSpeed * 3f);
+
+        transform.LookAt(lookTowards, Vector3.up);
+
+        return Mathf.Lerp(1f, 0f, Vector3.Distance(lookTarget, lookPos));
     }
 
     private float RotationInfluence(Vector2 moveInput)
@@ -118,20 +165,9 @@ public class PawnController : MonoBehaviour
         {
             return 1f;
         }
-        Vector3 lookTarget = transform.position + new Vector3(moveInput.x, 0f, moveInput.y);
 
-        Vector3 lookPos = transform.position + transform.forward;
-
-        if(Vector3.Distance(lookTarget,lookPos) >= Vector3.Distance(lookTarget,transform.position) * 1.95f)
-        {
-            lookTarget = transform.position + transform.right;
-        }
-
-        Vector3 lookTowards = Vector3.MoveTowards(lookPos, lookTarget, Time.deltaTime * speed * 3f);
-
-        transform.LookAt(lookTowards,Vector3.up);
-
-        return Mathf.Lerp(1f,0f, Vector3.Distance(lookTarget, lookPos));
+        return RotationInfluence(moveInput, transform.forward);
+        
     }
 
     private float MoveSpeed()

@@ -49,6 +49,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSet: 1
   speed: 2
+  rotationSpeed: 0
+  controlRotation: 0
+  OnBeginPossession:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndPossession:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4115456512393463117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,6 +69,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a0857188fced6345ac11e943d498335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  taskLocation: {fileID: 0}
+  OnPrimary:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSecondary:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTaskBegin:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTaskComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!54 &3409904525702073628
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -86,7 +107,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!65 &6159629470851218449
 BoxCollider:
