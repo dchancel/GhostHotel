@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using UnityEngine.Events;
 
 public enum MoveSet { ghost,standard}
 
@@ -7,6 +9,9 @@ public class PawnController : MonoBehaviour
     [SerializeField] private MoveSet moveSet;
     [SerializeField] private float speed;
     [SerializeField] private bool controlRotation;
+
+    public UnityEvent OnBeginPossession;
+    public UnityEvent OnEndPossession;
 
     private PlayerController controller;
 
@@ -34,6 +39,7 @@ public class PawnController : MonoBehaviour
             return false;
         }
         controller = pc;
+        OnBeginPossession.Invoke();
         return true;
     }
 
@@ -46,13 +52,43 @@ public class PawnController : MonoBehaviour
         }
 
         GameObject go = Instantiate(newPossession, transform.position, Quaternion.identity);
-        go.GetComponent<PawnController>().Possess(controller);
-        EndPossession();
+        StartCoroutine(DelayedPossession(go, controller));
+        ReleasePawn();
+    }
+
+    private IEnumerator DelayedPossession(GameObject go, PlayerController pc)
+    {
+        yield return new WaitForEndOfFrame();
+        pc.Possess(go.GetComponent<PawnController>());
+        //go.GetComponent<PawnController>().Possess(pc);
     }
 
     public void EndPossession()
     {
         controller = null;
+        OnEndPossession.Invoke();
+    }
+
+    public void SetPawnHeight(float f)
+    {
+        StartCoroutine(LerpPawnHeight(f));
+    }
+
+    private IEnumerator LerpPawnHeight(float f)
+    {
+        float t = 0f;
+        float timer = 0.3f;
+        Vector3 starting = transform.position;
+        Vector3 ending = new Vector3(transform.position.x,f,transform.position.z);
+        GetComponent<Collider>().enabled = false;
+        while(t < timer)
+        {
+            yield return new WaitForEndOfFrame();
+            t += Time.deltaTime;
+            transform.position = Vector3.Lerp(starting,ending,t/timer);
+        }
+        rb.linearVelocity = Vector3.zero;
+        GetComponent<Collider>().enabled = true;
     }
 
     public bool IsNPC()

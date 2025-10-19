@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     public void OnDeviceLost()
     {
         Debug.Log($"Device Lost");
+        ReleasePawn();
     }
 
     public void Possess(PawnController p)
