@@ -12,11 +12,18 @@ public class PawnController : MonoBehaviour
 
     private Rigidbody rb;
 
+    private TaskController tc;
+
     private void Awake()
     {
         if(moveSet != MoveSet.ghost)
         {
             rb = GetComponent<Rigidbody>();
+        }
+
+        if (GetComponent<TaskController>())
+        {
+            tc = GetComponent<TaskController>();
         }
     }
 
@@ -28,6 +35,19 @@ public class PawnController : MonoBehaviour
         }
         controller = pc;
         return true;
+    }
+
+    public void SpawnPossession(GameObject newPossession)
+    {
+        if (!newPossession.GetComponent<PawnController>())
+        {
+            Debug.LogError("No Pawn Controller Found! Aborting.");
+            return;
+        }
+
+        GameObject go = Instantiate(newPossession, transform.position, Quaternion.identity);
+        go.GetComponent<PawnController>().Possess(controller);
+        EndPossession();
     }
 
     public void EndPossession()
@@ -66,9 +86,6 @@ public class PawnController : MonoBehaviour
 
         Vector3 lookPos = transform.position + transform.forward;
 
-
-        Debug.Log(Vector3.Distance(lookTarget, lookPos) + " vs " + Vector3.Distance(lookTarget, transform.position) * 2f);
-
         if(Vector3.Distance(lookTarget,lookPos) >= Vector3.Distance(lookTarget,transform.position) * 1.95f)
         {
             lookTarget = transform.position + transform.right;
@@ -79,13 +96,6 @@ public class PawnController : MonoBehaviour
         transform.LookAt(lookTowards,Vector3.up);
 
         return Mathf.Lerp(1f,0f, Vector3.Distance(lookTarget, lookPos));
-
-        if (Vector3.Distance(lookTarget, lookPos) < 0.1f)
-        {
-            return 1f;
-        }
-
-        return 0f;
     }
 
     private float MoveSpeed()
@@ -100,6 +110,11 @@ public class PawnController : MonoBehaviour
         {
             controller.TryPossess();
         }
+
+        if(tc != null)
+        {
+            tc.DoPrimary();
+        }
     }
 
     public void DoSecondary()
@@ -110,7 +125,17 @@ public class PawnController : MonoBehaviour
         }
         else
         {
-            controller.ReleasePawn(); //return to ghost
+            ReleasePawn();
         }
+
+        if (tc != null)
+        {
+            tc.DoSecondary();
+        }
+    }
+
+    public void ReleasePawn()
+    {
+        controller.ReleasePawn(); //return to ghost
     }
 }

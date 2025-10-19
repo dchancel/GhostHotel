@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,9 +13,26 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private UnityEngine.UI.Slider timerSlider;
 
+    [HideInInspector] public UnityEvent pauseChange;
+
     private void Start()
     {
         StartSetup();
+    }
+
+    public bool IsPaused()
+    {
+        return isPaused;
+    }
+
+    public void SetPause(bool b)
+    {
+        if(isPaused == b)
+        {
+            return;
+        }
+        isPaused = b;
+        pauseChange.Invoke();
     }
 
     private void StartSetup()

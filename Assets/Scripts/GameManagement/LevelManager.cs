@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class LevelManager : MonoBehaviour
     public PlayerData[] playerData = new PlayerData[2];
 
     public int players = 0;
+
+    public List<HotelEffect> hotelEffects = new List<HotelEffect>();
 
     private void Start()
     {

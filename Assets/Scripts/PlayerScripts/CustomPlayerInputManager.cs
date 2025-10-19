@@ -46,6 +46,11 @@ public class CustomPlayerInputManager : PlayerInputManager
     {
         Debug.Log($"Player left: {playerInput.playerIndex} with device: {playerInput.devices[0].name}");
 
+        if(playerInput.GetComponent<PlayerController>() == null)
+        {
+            return;
+        }
+
         playerInput.GetComponent <PlayerController>().Packout(data[playerInput.playerIndex]);
 
         players.Remove(playerInput);
