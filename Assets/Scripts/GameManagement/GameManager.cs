@@ -11,8 +11,6 @@ public class GameManager : MonoBehaviour
     private float serviceTime = 0f;
     private float serviceLength = 3f * 60f;
 
-    [SerializeField] private UnityEngine.UI.Slider timerSlider;
-
     [HideInInspector] public UnityEvent pauseChange;
 
     private void Start()
@@ -65,7 +63,8 @@ public class GameManager : MonoBehaviour
         if(serviceTime < serviceLength)
         {
             serviceTime += Time.deltaTime;
-            timerSlider.value = serviceTime;
+            HUDManager.instance.SetTime(serviceTime / serviceLength);
+            //timerSlider.value = serviceTime;
         }
         else
         {
